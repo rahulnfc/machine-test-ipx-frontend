@@ -1,7 +1,11 @@
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { ShoppingCartOutlined } from '@material-ui/icons'
 import styled from 'styled-components'
 import axios from 'axios'
+import { UserContext } from '../context/usercontext'
+import Cookies from 'universal-cookie'
+import { Badge } from '@material-ui/core'
+const cookies = new Cookies()
 const server = 'http://localhost:3001'
 
 const Container = styled.div`
@@ -79,9 +83,10 @@ const Button = styled.button`
     }
 `;
 
-const Card = (props) => {
-    const { products, setProducts, setCartCount } = props
+const Card = () => {
+    const { products, setProducts, setCartCount, cartProducts, setCartProducts } = useContext(UserContext)
     const userId = localStorage.getItem('userId');
+    const token = cookies.get('userjwt');
 
     const addToCart = (async (productId) => {
         await axios.post(`${server}/api/user/addToCart`, { productId, userId }).then(res => {
@@ -92,10 +97,19 @@ const Card = (props) => {
     useEffect(() => {
         axios.get(`${server}/api/products`).then(res => {
             setProducts(res.data)
-        }).catch(err => {
-            console.log(err.response)
+        }).catch(error => {
+            console.log(error)
         })
-    }, [setProducts]);
+
+        axios.get(`${server}/api/user/cart/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then(res => {
+            setCartProducts(res.data)
+            console.log(res.data)
+        }).catch(error => {
+            console.log(error)
+        })
+    }, [setProducts, setCartProducts, userId, token])
 
     return (
         <Container>
@@ -108,15 +122,24 @@ const Card = (props) => {
                             <p>${product.price}</p>
                         </ProductDetails>
                         <Buttons>
-                            <Button onClick={() => addToCart(product._id)}>
-                                <ShoppingCartOutlined />
-                                <p> Add to Cart</p>
-                            </Button>
+                            {cartProducts.find(cartProduct => cartProduct.productId === product._id) ?
+                                <Badge badgeContent={cartProducts.find(cartProduct => cartProduct.productId === product._id).quantity} color="secondary" overlap="circular">
+                                    <Button onClick={() => addToCart(product._id)}>
+                                        <ShoppingCartOutlined />
+                                        <p> Add to Cart</p>
+                                    </Button>
+                                </Badge>
+                                :
+                                <Button onClick={() => addToCart(product._id)}>
+                                    <ShoppingCartOutlined />
+                                    <p> Add to Cart</p>
+                                </Button>
+                            }
                         </Buttons>
-                    </ProductCard>
+                    </ProductCard >
                 )
             })}
-        </Container>
+        </Container >
     )
 }
 

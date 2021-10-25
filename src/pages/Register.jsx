@@ -132,7 +132,6 @@ const Register = () => {
                         history.push('/login')
                     }).catch((error) => {
                         const response = error.response.data
-                        console.log(response)
                         if (response.emailExists) {
                             // email error
                             setEmailExists(true)
@@ -143,55 +142,53 @@ const Register = () => {
                     })
             })}
         >
-            {formik => (
-                <Container>
-                    <LogoText> TrendZStation. </LogoText>
-                    <Form>
-                        <Card>
-                            <CardHeader> Register An Account With Us </CardHeader>
-                            <InputField
-                                label="Username"
-                                id="username"
-                                type="text"
-                                name="username"
-                                placeholder="Enter your username"
-                            />
-                            <InputField
-                                label="Email"
-                                id="email"
-                                type="text"
-                                name="email"
-                                placeholder="Enter your email"
-                            />
-                            {emailExists && <Error> Email already exists </Error>}
-                            <InputField
-                                label="Phone Number"
-                                id="phone"
-                                type="text"
-                                name="phone"
-                                placeholder="Enter your phone number"
-                            />
-                            {phoneExists && <Error> Phone number already exists </Error>}
-                            <InputField
-                                label="Password"
-                                id="password"
-                                type="password"
-                                name="password"
-                                placeholder="Enter your password"
-                            />
-                            <InputField
-                                label="Confirm Password"
-                                id="confirmPassword"
-                                type="password"
-                                name="confirmPassword"
-                                placeholder="Confirm your password"
-                            />
-                            <Submit type="submit"> Register </Submit>
-                        </Card>
-                    </Form>
-                    <LinkText to="/login"> Already have an account? Login here </LinkText>
-                </Container>
-            )}
+            <Container>
+                <LogoText> TrendZStation. </LogoText>
+                <Form>
+                    <Card>
+                        <CardHeader> Register An Account With Us </CardHeader>
+                        <InputField
+                            label="Username"
+                            id="username"
+                            type="text"
+                            name="username"
+                            placeholder="Enter your username"
+                        />
+                        <InputField
+                            label="Email"
+                            id="email"
+                            type="text"
+                            name="email"
+                            placeholder="Enter your email"
+                        />
+                        {emailExists && <Error> Email already exists </Error>}
+                        <InputField
+                            label="Phone Number"
+                            id="phone"
+                            type="text"
+                            name="phone"
+                            placeholder="Enter your phone number"
+                        />
+                        {phoneExists && <Error> Phone number already exists </Error>}
+                        <InputField
+                            label="Password"
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Enter your password"
+                        />
+                        <InputField
+                            label="Confirm Password"
+                            id="confirmPassword"
+                            type="password"
+                            name="confirmPassword"
+                            placeholder="Confirm your password"
+                        />
+                        <Submit type="submit"> Register </Submit>
+                    </Card>
+                </Form>
+                <LinkText to="/login"> Already have an account? Login here </LinkText>
+            </Container>
         </Formik>
     )
 }

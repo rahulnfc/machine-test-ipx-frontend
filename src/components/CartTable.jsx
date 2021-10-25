@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
 import axios from 'axios'
+import { UserContext } from '../context/usercontext';
+import { useContext } from 'react';
 const server = 'http://localhost:3001'
 const userId = localStorage.getItem('userId')
 
@@ -127,9 +129,9 @@ const Heading = styled.p`
     float: right;
 `;
 
-const CartTable = (props) => {
-    const { cartProducts, setCartProducts } = props;
-
+const CartTable = () => {
+    const { cartProducts, setCartProducts } = useContext(UserContext);
+    
     const increment = (productId) => {
         axios.post(`${server}/api/user/cartincrement`, { productId, userId }).then(response => {
             setCartProducts(response.data.cart)

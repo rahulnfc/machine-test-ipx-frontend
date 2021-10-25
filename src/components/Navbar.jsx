@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { Badge } from '@material-ui/core'
 import { Search, ShoppingCartOutlined } from '@material-ui/icons'
 import styled from 'styled-components'
 import { useHistory, Link } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'universal-cookie'
+import { UserContext } from '../context/usercontext'
 const cookies = new Cookies()
 const server = 'http://localhost:3001'
 
@@ -100,11 +101,9 @@ const MenuItem = styled.div`
     }
 `;
 
-const Navbar = (props) => {
-    const [cartCount, setCartCount] = useState(0)
-    const [logined, setLogined] = useState(true)
+const Navbar = () => {
     const history = useHistory()
-    const { username } = props
+    const { userData, cartCount, setCartCount, logined, setLogined, search, setSearch } = useContext(UserContext)
     const userId = localStorage.getItem('userId')
 
     const handleLogout = () => {
@@ -121,8 +120,8 @@ const Navbar = (props) => {
         // fetch the cart count
         axios.get(`${server}/api/user/cartCount/${userId}`).then(res => {
             setCartCount(res.data)
-        }).catch(err => {
-            console.log(err.response)
+        }).catch(error => {
+            console.log(error)
         })
     });
 
@@ -132,7 +131,7 @@ const Navbar = (props) => {
                 <Left>
                     <Language>EN</Language>
                     <SearchContainer>
-                        <Input />
+                        <Input placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
                         <Search style={{ color: 'gray', fontSize: 16 }} />
                     </SearchContainer>
                 </Left>
@@ -140,7 +139,7 @@ const Navbar = (props) => {
                     <Logo to='/'>TrendZStation.</Logo>
                 </Center>
                 <Right>
-                    {username !== undefined && <MenuItem> Hi, <span style={{ color: 'teal' }}>{username}</span></MenuItem>}
+                    {userData.username !== undefined && <MenuItem> Hi, <span style={{ color: 'teal' }}>{userData.username}</span></MenuItem>}
                     <MenuItem>
                         <Link to='/cart' style={{ textDecoration: 'none', color: 'black' }}>
                             <Badge badgeContent={cartCount} color="primary" >

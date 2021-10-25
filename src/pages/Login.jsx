@@ -79,7 +79,6 @@ const Login = () => {
     const history = useHistory()
     useEffect(() => {
         const token = cookies.get('userjwt')
-        console.log(token)
         if (token) {
             history.push('/')
         }
@@ -118,7 +117,6 @@ const Login = () => {
                         history.push('/')
                     }).catch((error) => {
                         const response = error.response.data
-                        console.log(response);
                         if (response.invalidEmail) {
                             // email error
                             setEmailError(true)
@@ -129,34 +127,32 @@ const Login = () => {
                     })
             })}
         >
-            {formik => (
-                <Container>
-                    <LogoText> TrendZStation. </LogoText>
-                    <Form>
-                        <Card>
-                            <CardHeader> Login And Enjoy Shopping </CardHeader>
-                            <InputField
-                                label="Email"
-                                id="email"
-                                type="text"
-                                name="email"
-                                placeholder="Enter your email"
-                            />
-                            {emailError && <Error>Invalid Email Address</Error>}
-                            <InputField
-                                label="Password"
-                                id="password"
-                                type="password"
-                                name="password"
-                                placeholder="Enter your password"
-                            />
-                            {passwordError && <Error>Invalid Password</Error>}
-                            <Submit type="submit">Login</Submit>
-                        </Card>
-                    </Form>
-                    <LinkText to="/register"> Don't have an account? Register here </LinkText>
-                </Container>
-            )}
+            <Container>
+                <LogoText> TrendZStation. </LogoText>
+                <Form>
+                    <Card>
+                        <CardHeader> Login And Enjoy Shopping </CardHeader>
+                        <InputField
+                            label="Email"
+                            id="email"
+                            type="text"
+                            name="email"
+                            placeholder="Enter your email"
+                        />
+                        {emailError && <Error>Invalid Email Address</Error>}
+                        <InputField
+                            label="Password"
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Enter your password"
+                        />
+                        {passwordError && <Error>Invalid Password</Error>}
+                        <Submit type="submit">Login</Submit>
+                    </Card>
+                </Form>
+                <LinkText to="/register"> Don't have an account? Register here </LinkText>
+            </Container>
         </Formik>
     )
 }
